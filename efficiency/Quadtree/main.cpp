@@ -6,23 +6,26 @@ string input;
 bool picture [512][512];
 int pos = 0, n;
 
-void decode(int x, int y, int size, int index)
+void decode(int x, int y, int size)
 {
-    pos++;
-    if(input[index] == 'Q')
+    if(input[pos] == 'Q')
     {
+        pos++;
         size /= 2;
         // Recursively decode each sub quadrant
-        decode(x, y, size, pos);
-        decode(x + size, y, size, pos);
-        decode(x, y + size, size, pos);
-        decode(x + size, y + size, size, pos);
+        decode(x, y, size);
+        decode(x + size, y, size);
+        decode(x, y + size, size);
+        decode(x + size, y + size, size);
     }
     else
+    {
         // B is 1, W is 0
         for(int i = x ; i < x + size; i++)
             for(int j = y ; j < y + size ; j++)
-                picture[j][i] = input[index] == 'B';
+                picture[j][i] = input[pos] == 'B';
+        pos++;
+    }
 }
 
 void printPicture()
@@ -59,7 +62,7 @@ int main ()
 {
     std::ios::sync_with_stdio(false);
     cin >> n >> input;
-    decode(0, 0, n, 0);
+    decode(0, 0, n);
     printPicture();
     return 0;
 }
